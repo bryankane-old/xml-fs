@@ -2,6 +2,7 @@
 #include "libroxml/inc/roxml.h"
 #include "xml_parser.h"
 
+// returns the "file_name" attribute for a given node
 char* get_file_name(node_t* node)
 {
     node_t* attr_node = roxml_get_attr(node, file_name_attr, 0);
@@ -10,11 +11,16 @@ char* get_file_name(node_t* node)
     return roxml_get_content(attr_node, NULL, 0, 0);
 }
 
+// sets the "file_name" attribute for a given node
+// (overwrites existing file names!)
+// returns previous file name if it exists
 char* set_file_name(node_t* node, char* file_name)
 {
     return add_or_update_attribute(node, file_name_attr, file_name);
 }
 
+// adds in an attribute for a given node, key (attribute name), and value
+// overwrites attribute value if exists (returns old value)
 char* add_or_update_attribute(node_t* node, char* key, char* value)
 {
     node_t* prev_attr = roxml_get_attr(node, key, 0);
@@ -28,6 +34,7 @@ char* add_or_update_attribute(node_t* node, char* key, char* value)
     return prev_value;
 }
 
+// iterates through all children for a given node, and prints out their file name
 void print_all_children(node_t* node)
 {
     int num_children = roxml_get_chld_nb(node);
@@ -39,6 +46,8 @@ void print_all_children(node_t* node)
     }
 }
 
+// opens up the xml file and writes temp xml
+// takes in the file's root (should be open already)
 void save_xml_file(node_t* root)
 {
     int len = 0;
