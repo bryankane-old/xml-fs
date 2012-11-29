@@ -46,11 +46,11 @@ node_t* add_child_element(node_t* parent, char* tag_name)
 // or returns NULL if it doesn't exist.
 node_t* get_child_by_file_name(node_t* parent, char* file_name)
 {
-    int num_children = roxml_get_chld_nb(node);
+    int num_children = roxml_get_chld_nb(parent);
     int i;
     for (i = 0; i < num_children; i++)
     {
-        node_t* current_child = roxml_get_chld(node, NULL, i);
+        node_t* current_child = roxml_get_chld(parent, NULL, i);
 
         // since file_names are always going to be unique,
         // as soon as we find a match, we can return it.
@@ -64,7 +64,10 @@ node_t* get_child_by_file_name(node_t* parent, char* file_name)
 // returns the node at that path, or NULL if there's a problem finding it
 node_t* get_node_at_path(node_t* root, char* path)
 {
-    char* next_child_file_name = strtok(path, "/");
+    char current_path[strlen(path)];
+    strcpy(current_path, path);
+    const char* delim = "/";
+    char* next_child_file_name = strtok(current_path, delim);
     node_t* node = root;
     while (next_child_file_name != NULL)
     {
@@ -72,6 +75,7 @@ node_t* get_node_at_path(node_t* root, char* path)
         if (next_child == NULL)
             return NULL;
         node = next_child;
+        next_child_file_name = strtok(NULL, delim);
     }
     return node;
 }
@@ -105,10 +109,14 @@ void save_xml_file(node_t* root)
 int main(void)
 {
     node_t * root = roxml_load_doc(sample_file_name);
-    node_t* school = roxml_get_chld(root, NULL, 0);
-    print_all_children(school);
-    set_file_name(school, "school_0");
-    save_xml_file(root);
+    char* path = "school/dorms_0/dorm_1";
+    node_t* ivory = get_node_at_path(root, path);
+
+
+    // node_t* school = roxml_get_chld(root, NULL, 0);
+    // print_all_children(school);
+    // set_file_name(school, "school_0");
+    save_xml_file(ivory);
     roxml_close(root);
     return 0;
 }
