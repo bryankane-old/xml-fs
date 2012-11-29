@@ -1,6 +1,7 @@
 /* Lindsey DiAntonio. LGD@gwmail.guw.edu */
 
 #include <stdio.h>
+#include <string.h>
 
 //ll is the head of the linked list
 
@@ -28,7 +29,6 @@ struct linked_list* ll_create(void){
 void ll_destroy(struct linked_list *ll){
     //if the list is already empty
     if(ll->next == NULL){
-        printf("Destroy: This list is empty\n");
         free(ll);
     } else{
         //create a pointer to iterate through the list effectively
@@ -43,7 +43,6 @@ void ll_destroy(struct linked_list *ll){
         //Then delete the last one
         free(head);
         free(ll);
-        printf("Destroy: This linked list has been destroyed\n");
     }
 }
 
@@ -52,7 +51,6 @@ void ll_add(struct linked_list *ll, void *value){
     //save the head before adding in in "place 2" node to be your head of list
    // notSuccess = pthread_mutex_lock(&mutex);
      //               if(notSuccess) { printf("lock failed");}
-    printf("in ll_add\n");
     struct linked_list *tofill = ll_create();
     tofill->count = 0;
     if(ll->next == NULL){
@@ -94,7 +92,6 @@ void* ll_remove_first(struct linked_list *ll){
 
 
     if(ll->next == NULL){
-        printf("This list is empty\n");
        //  notSuccess = pthread_mutex_unlock(&mutex);
         return NULL;
     }
@@ -103,7 +100,6 @@ void* ll_remove_first(struct linked_list *ll){
     if(head->next == NULL){
         ll->next = NULL;
         free(head);
-        printf("RemoveFirst: This list only had one element, so now is now empty\n");
         //notSuccess = pthread_mutex_unlock(&mutex);
         return ret;
     } else{
@@ -115,19 +111,6 @@ void* ll_remove_first(struct linked_list *ll){
 }
 
 int ll_plusplus(struct linked_list *ll, void* value){
-    // //increments the count at the given index
-    // //returns how many of this value are in the list
-    // struct linked_list * node = ll->next;
-    // int i;
-    // for(i=1; i<index; i++){
-    //     node = node->next;   
-    // }
-    // node->count = node->count + 1;
-    // return node->count;
-
-
-
-
     if(ll->next == NULL)
         return 0;
         //Is == the correct thing to use in this situation??

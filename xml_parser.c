@@ -13,15 +13,6 @@ char* get_file_name(node_t* node)
     return roxml_get_content(attr_node, NULL, 0, 0);
 }
 
-char* get_file_name_with_buffer(node_t* node, char* buffer)
-{
-    node_t* attr_node = roxml_get_attr(node, file_name_attr, 0);
-    if (attr_node == NULL)
-        return "";
-    char* file_name = roxml_get_content(attr_node, NULL, 0, 0);
-    strcpy(buffer, file_name);
-}
-
 // sets the "file_name" attribute for a given node
 // (overwrites existing file names!)
 // returns previous file name if it exists
@@ -89,7 +80,7 @@ node_t* get_node_at_path(node_t* root, char* path)
     strcpy(current_path, path);
     const char* delim = "/";
     char* next_child_file_name = strtok(current_path, delim);
-    next_child_file_name = strtok(NULL, delim);
+    // next_child_file_name = strtok(NULL, delim);
     node_t* node = root;
     while (next_child_file_name != NULL)
     {
@@ -139,7 +130,7 @@ void save_xml_file(node_t* root)
     char * buffer = NULL;
     FILE * file_out;
     len = roxml_commit_changes(root, NULL, &buffer, 1);
-    file_out = fopen(second_sample_file_name, "w");
+    file_out = fopen(sample_file_name, "w");
     fwrite(buffer, 1, len, file_out);
     fclose(file_out);
 }
@@ -153,6 +144,13 @@ node_t* open_file(char* file_path)
         return roxml_load_doc(sample_file_name);
     else
         return roxml_load_doc(file_path);
+}
+
+void save_initial_file_names(char* file_path)
+{
+    node_t* root = open_file(file_path);
+    createUniqueTagsRecursive(root);
+    save_xml_file(root);
 }
 
 

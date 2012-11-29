@@ -23,7 +23,6 @@ void createUniqueTagsRecursive(node_t *node){
         }
         char newTagName[1000];
         snprintf(newTagName, sizeof(tagName) + 100, "%s_%d", tagName, num);
-        printf("%s\n", newTagName);
         set_file_name(child, newTagName);
         createUniqueTagsRecursive(child);
     }

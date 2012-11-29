@@ -58,6 +58,8 @@ static int xml_readdir(const char *path, void *buf, fuse_fill_dir_t filler, off_
     (void) offset;
     (void) fi;
 
+    printf("%s\n", path);
+
     // if(strcmp(path, "/") != 0)
     //     return -ENOENT;
 
@@ -119,6 +121,7 @@ static struct fuse_operations xml_oper = {
 
 int main(int argc, char *argv[])
 {
+    save_initial_file_names(NULL);
     return fuse_main(argc, argv, &xml_oper);
 }
 
