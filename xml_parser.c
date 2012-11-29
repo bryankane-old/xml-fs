@@ -18,10 +18,7 @@ char* get_file_name_with_buffer(node_t* node, char* buffer)
     if (attr_node == NULL)
         return "";
     char* file_name = roxml_get_content(attr_node, NULL, 0, 0);
-    printf("file_name: %s\n", file_name);
     strcpy(buffer, file_name);
-    printf("buffer pointer: %p\n", &buffer);
-    // buffer = roxml_get_content(attr_node, NULL, 0, 0);
 }
 
 // sets the "file_name" attribute for a given node
@@ -97,7 +94,6 @@ void get_all_child_file_names(char** buffer, node_t* parent)
 {
     int num_children = roxml_get_chld_nb(parent);
     int i;
-    printf("pointer to buffer: %p\n", buffer);
     for (i = 0; i < num_children; i++)
     {
         node_t* current_child = roxml_get_chld(parent, NULL, i);
