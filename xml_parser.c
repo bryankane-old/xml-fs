@@ -28,7 +28,11 @@ int is_leaf (char* path)
     node_t* root = open_file(sample_file_name);
     node_t* node = get_node_at_path(root, path);
     if (roxml_get_chld_nb(node) == 0)
+    {
+        roxml_close(root);
         return -1;
+    }
+    roxml_close(root);
     return 0;
 }
 
@@ -104,7 +108,7 @@ void get_all_child_file_names(char** buffer, node_t* parent)
         if (attr_node != NULL)
         {
             char* file_name = roxml_get_content(attr_node, NULL, 0, 0);
-            buffer[i] =(char*)malloc(strlen(file_name));
+            buffer[i] =(char*)malloc((strlen(file_name)+1) * sizeof(char));
             strcpy(buffer[i], file_name);
         }
     }
@@ -151,6 +155,7 @@ void save_initial_file_names(char* file_path)
     node_t* root = open_file(file_path);
     createUniqueTagsRecursive(root);
     save_xml_file(root);
+    roxml_close(root);
 }
 
 

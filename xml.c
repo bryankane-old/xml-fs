@@ -58,8 +58,6 @@ static int xml_readdir(const char *path, void *buf, fuse_fill_dir_t filler, off_
     (void) offset;
     (void) fi;
 
-    printf("%s\n", path);
-
     // if(strcmp(path, "/") != 0)
     //     return -ENOENT;
 
@@ -76,9 +74,9 @@ static int xml_readdir(const char *path, void *buf, fuse_fill_dir_t filler, off_
     get_all_child_file_names(children, current_dir);
     for(i=0; i < num_children; i++){
         filler(buf, children[i], NULL, 0);
+        free(children[i]);
     }
-    filler(buf, xml_path + 1, NULL, 0);
-
+    roxml_close(root);
     return 0;
 }
 
