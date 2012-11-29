@@ -14,11 +14,14 @@
 #include <string.h>
 #include <errno.h>
 #include <fcntl.h>
+#include "xml_parser.h"
 
 static const char *xml_str = "xml World!\n";
 static const char *xml_path = "/xml";
 
 char** xml_get_children(const char *path){
+
+    // return get_all_child_file_names_by_path(path);
     //needs to get children based on current file path
     //returns an array of childnames (char*)
     char* children[3];
@@ -43,7 +46,10 @@ static int xml_getattr(const char *path, struct stat *stbuf)
         stbuf->st_size = strlen(xml_str);
     }
     else
-        res = -ENOENT;
+    {
+        stbuf->st_mode = S_IFDIR | 0755;
+        stbuf->st_nlink = 2;
+    }
 
     return res;
 }
@@ -53,17 +59,23 @@ static int xml_readdir(const char *path, void *buf, fuse_fill_dir_t filler, off_
     (void) offset;
     (void) fi;
 
-    if(strcmp(path, "/") != 0)
-        return -ENOENT;
+    // if(strcmp(path, "/") != 0)
+    //     return -ENOENT;
 
     //add standard paths
     filler(buf, ".", NULL, 0);
     filler(buf, "..", NULL, 0);
 
     //get children
-    char** children = xml_get_children(path);
     int i;
-    for(i=0; i < children.length; i++){
+    node_t* root = open_file(sample_file_name);
+    node_t* current_dir = get_node_at_path(root, path);
+    int num_children = roxml_get_chld_nb(current_dir);
+    char* children[num_children];
+    printf("pointer to children: %p\n", children);
+    get_all_child_file_names(children, current_dir);
+    for(i=0; i < num_children; i++){
+        printf("%s\n", children[i]);
         filler(buf, children[i], NULL, 0);
     }
     filler(buf, xml_path + 1, NULL, 0);

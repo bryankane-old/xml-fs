@@ -12,6 +12,18 @@ char* get_file_name(node_t* node)
     return roxml_get_content(attr_node, NULL, 0, 0);
 }
 
+char* get_file_name_with_buffer(node_t* node, char* buffer)
+{
+    node_t* attr_node = roxml_get_attr(node, file_name_attr, 0);
+    if (attr_node == NULL)
+        return "";
+    char* file_name = roxml_get_content(attr_node, NULL, 0, 0);
+    printf("file_name: %s\n", file_name);
+    strcpy(buffer, file_name);
+    printf("buffer pointer: %p\n", &buffer);
+    // buffer = roxml_get_content(attr_node, NULL, 0, 0);
+}
+
 // sets the "file_name" attribute for a given node
 // (overwrites existing file names!)
 // returns previous file name if it exists
@@ -68,6 +80,7 @@ node_t* get_node_at_path(node_t* root, char* path)
     strcpy(current_path, path);
     const char* delim = "/";
     char* next_child_file_name = strtok(current_path, delim);
+    next_child_file_name = strtok(NULL, delim);
     node_t* node = root;
     while (next_child_file_name != NULL)
     {
@@ -78,6 +91,24 @@ node_t* get_node_at_path(node_t* root, char* path)
         next_child_file_name = strtok(NULL, delim);
     }
     return node;
+}
+
+void get_all_child_file_names(char** buffer, node_t* parent)
+{
+    int num_children = roxml_get_chld_nb(parent);
+    int i;
+    printf("pointer to buffer: %p\n", buffer);
+    for (i = 0; i < num_children; i++)
+    {
+        node_t* current_child = roxml_get_chld(parent, NULL, i);
+        node_t* attr_node = roxml_get_attr(current_child, file_name_attr, 0);
+        if (attr_node != NULL)
+        {
+            char* file_name = roxml_get_content(attr_node, NULL, 0, 0);
+            buffer[i] =(char*)malloc(strlen(file_name));
+            strcpy(buffer[i], file_name);
+        }
+    }
 }
 
 // iterates through all children for a given node, and prints out their file name
@@ -106,17 +137,42 @@ void save_xml_file(node_t* root)
 }
 
 
-int main(void)
+// Open xml file at specified path, and return the root node
+// if no file path specified, open the sample file
+node_t* open_file(char* file_path)
 {
-    node_t * root = roxml_load_doc(sample_file_name);
-    char* path = "school/dorms_0/dorm_1";
-    node_t* ivory = get_node_at_path(root, path);
-
-
-    // node_t* school = roxml_get_chld(root, NULL, 0);
-    // print_all_children(school);
-    // set_file_name(school, "school_0");
-    save_xml_file(ivory);
-    roxml_close(root);
-    return 0;
+    if (file_path == NULL)
+        return roxml_load_doc(sample_file_name);
+    else
+        return roxml_load_doc(file_path);
 }
+
+
+// int main(void)
+// {
+//     char* path = "/";
+//     node_t* root = open_file(sample_file_name);
+//     node_t* current_dir = get_node_at_path(root, path);
+//     int num_children = roxml_get_chld_nb(current_dir);
+//     printf("%d\n", num_children);
+//     char** children = get_all_child_file_names(current_dir);
+//     int i;
+//     for(i=0; i < num_children; i++){
+//         printf("%s\nabc\n", children[i]);
+//     }
+
+
+
+//     // node_t * root = roxml_load_doc(sample_file_name);
+//     // char* path = "/";
+//     // node_t* ivory = get_node_at_path(root, path);
+//     // get_all_child_file_names(ivory);
+
+
+//     // // node_t* school = roxml_get_chld(root, NULL, 0);
+//     // // print_all_children(school);
+//     // // set_file_name(school, "school_0");
+//     // save_xml_file(ivory);
+//     // roxml_close(root);
+//     return 0;
+// }

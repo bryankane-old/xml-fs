@@ -1,4 +1,4 @@
-<school name="The George Washington University" file_name="school">
+<school name="The George Washington University" file_name="school_0">
     <location city="Washington" state="DC" file_name="location_0" />
     <student_population file_name="student_population_0">
         <freshmen>2500</freshmen>
@@ -13,9 +13,9 @@
             <year_built>1960</year_built>
         </dorm>
         <dorm name="Ivory Hall" file_name="dorm_1">
-            <year>Junior</year>
-            <rooms>400</rooms>
-            <year_built>2006</year_built>
+            <year file_name="year_0">Junior</year>
+            <rooms file_name="rooms_0">400</rooms>
+            <year_built file_name="year_built_0">2006</year_built>
         </dorm>
         <dorm name="Amsterdam Hall" file_name="dorm_2">
             <year>Junior</year>
@@ -28,7 +28,7 @@
             <year_built>1950</year_built>
         </dorm>
     </dorms>
-    <academic_buildings>
+    <academic_buildings file_name="academic_buildings">
         <building name="Phillips">
             <classrooms>75</classrooms>
             <offices>220</offices>
