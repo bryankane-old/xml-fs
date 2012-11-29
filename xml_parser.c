@@ -30,6 +30,17 @@ char* set_file_name(node_t* node, char* file_name)
     return add_or_update_attribute(node, file_name_attr, file_name);
 }
 
+// returns -1 if the node is a leaf (has no children)
+// or 0 if it is not a leaf (has at least one child)
+int is_leaf (char* path)
+{
+    node_t* root = open_file(sample_file_name);
+    node_t* node = get_node_at_path(root, path);
+    if (roxml_get_chld_nb(node) == 0)
+        return -1;
+    return 0;
+}
+
 // adds in an attribute for a given node, key (attribute name), and value
 // overwrites attribute value if exists (returns old value)
 char* add_or_update_attribute(node_t* node, char* key, char* value)
@@ -145,32 +156,32 @@ node_t* open_file(char* file_path)
 }
 
 
-int main(void)
-{
-//     char* path = "/";
-    node_t* root = open_file(sample_file_name);
-    createUniqueTagsRecursive(root);
-//     node_t* current_dir = get_node_at_path(root, path);
-//     int num_children = roxml_get_chld_nb(current_dir);
-//     printf("%d\n", num_children);
-//     char** children = get_all_child_file_names(current_dir);
-//     int i;
-//     for(i=0; i < num_children; i++){
-//         printf("%s\nabc\n", children[i]);
-//     }
+// int main(void)
+// {
+// //     char* path = "/";
+//     node_t* root = open_file(sample_file_name);
+//     createUniqueTagsRecursive(root);
+// //     node_t* current_dir = get_node_at_path(root, path);
+// //     int num_children = roxml_get_chld_nb(current_dir);
+// //     printf("%d\n", num_children);
+// //     char** children = get_all_child_file_names(current_dir);
+// //     int i;
+// //     for(i=0; i < num_children; i++){
+// //         printf("%s\nabc\n", children[i]);
+// //     }
 
 
 
-//     // node_t * root = roxml_load_doc(sample_file_name);
-//     // char* path = "/";
-//     // node_t* ivory = get_node_at_path(root, path);
-//     // get_all_child_file_names(ivory);
+// //     // node_t * root = roxml_load_doc(sample_file_name);
+// //     // char* path = "/";
+// //     // node_t* ivory = get_node_at_path(root, path);
+// //     // get_all_child_file_names(ivory);
 
 
-//     // // node_t* school = roxml_get_chld(root, NULL, 0);
-//     // // print_all_children(school);
-//     // // set_file_name(school, "school_0");
-    save_xml_file(root);
-    roxml_close(root);
-    return 0;
-}
+// //     // // node_t* school = roxml_get_chld(root, NULL, 0);
+// //     // // print_all_children(school);
+// //     // // set_file_name(school, "school_0");
+//     save_xml_file(root);
+//     roxml_close(root);
+//     return 0;
+// }
