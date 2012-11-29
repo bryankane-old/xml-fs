@@ -1,34 +1,34 @@
-<school name="The George Washington University" file_name="school_0">
-    <location city="Washington" state="DC" file_name="location_0" />
-    <student_population file_name="student_population_0">
+<school name="The George Washington University">
+    <location city="Washington" state="DC" />
+    <student_population>
         <freshmen>2500</freshmen>
         <sophomores>2375</sophomores>
         <juniors>2700</juniors>
         <seniors>2634</seniors>
     </student_population>
-    <dorms file_name="dorms_0">
-        <dorm name="Thurston Hall" file_name="dorm_0">
+    <dorms>
+        <dorm name="Thurston Hall">
             <year>Freshman</year>
             <rooms>500</rooms>
             <year_built>1960</year_built>
         </dorm>
-        <dorm name="Ivory Hall" file_name="dorm_1">
-            <year file_name="year_0">Junior</year>
-            <rooms file_name="rooms_0">400</rooms>
-            <year_built file_name="year_built_0">2006</year_built>
+        <dorm name="Ivory Hall">
+            <year>Junior</year>
+            <rooms>400</rooms>
+            <year_built>2006</year_built>
         </dorm>
-        <dorm name="Amsterdam Hall" file_name="dorm_2">
+        <dorm name="Amsterdam Hall">
             <year>Junior</year>
             <rooms>250</rooms>
             <year_built>2004</year_built>
         </dorm>
-        <dorm name="JBKO Hall" file_name="dorm_3">
+        <dorm name="JBKO Hall">
             <year>Sophomore</year>
             <rooms>100</rooms>
             <year_built>1950</year_built>
         </dorm>
     </dorms>
-    <academic_buildings file_name="academic_buildings">
+    <academic_buildings>
         <building name="Phillips">
             <classrooms>75</classrooms>
             <offices>220</offices>

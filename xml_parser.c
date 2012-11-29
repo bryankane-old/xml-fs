@@ -2,6 +2,7 @@
 #include <string.h>
 #include "libroxml/inc/roxml.h"
 #include "xml_parser.h"
+#include "uniqueTags.h"
 
 // returns the "file_name" attribute for a given node
 char* get_file_name(node_t* node)
@@ -144,10 +145,11 @@ node_t* open_file(char* file_path)
 }
 
 
-// int main(void)
-// {
+int main(void)
+{
 //     char* path = "/";
-//     node_t* root = open_file(sample_file_name);
+    node_t* root = open_file(sample_file_name);
+    createUniqueTagsRecursive(root);
 //     node_t* current_dir = get_node_at_path(root, path);
 //     int num_children = roxml_get_chld_nb(current_dir);
 //     printf("%d\n", num_children);
@@ -168,7 +170,7 @@ node_t* open_file(char* file_path)
 //     // // node_t* school = roxml_get_chld(root, NULL, 0);
 //     // // print_all_children(school);
 //     // // set_file_name(school, "school_0");
-//     // save_xml_file(ivory);
-//     // roxml_close(root);
-//     return 0;
-// }
+    save_xml_file(root);
+    roxml_close(root);
+    return 0;
+}
