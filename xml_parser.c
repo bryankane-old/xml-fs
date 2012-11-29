@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 #include "libroxml/inc/roxml.h"
 #include "xml_parser.h"
 
@@ -32,6 +33,47 @@ char* add_or_update_attribute(node_t* node, char* key, char* value)
     }
     roxml_add_node(node, 0, ROXML_ATTR_NODE, key, value);
     return prev_value;
+}
+
+// Adds an empty child element with a given file name and parent
+// (useful for initially creating a file before writing content, or "touch"ing a file)
+node_t* add_child_element(node_t* parent, char* tag_name)
+{
+    return roxml_add_node(parent, 0, ROXML_ELM_NODE, tag_name, NULL);
+}
+
+// Finds the child of a parent element with a specific file name
+// or returns NULL if it doesn't exist.
+node_t* get_child_by_file_name(node_t* parent, char* file_name)
+{
+    int num_children = roxml_get_chld_nb(node);
+    int i;
+    for (i = 0; i < num_children; i++)
+    {
+        node_t* current_child = roxml_get_chld(node, NULL, i);
+
+        // since file_names are always going to be unique,
+        // as soon as we find a match, we can return it.
+        if (strcmp(get_file_name(current_child), file_name) == 0)
+            return current_child;
+    }
+    return NULL;
+}
+
+// Given a string path of file names (delimited by a backslash),
+// returns the node at that path, or NULL if there's a problem finding it
+node_t* get_node_at_path(node_t* root, char* path)
+{
+    char* next_child_file_name = strtok(path, "/");
+    node_t* node = root;
+    while (next_child_file_name != NULL)
+    {
+        node_t* next_child = get_child_by_file_name(node, next_child_file_name);
+        if (next_child == NULL)
+            return NULL;
+        node = next_child;
+    }
+    return node;
 }
 
 // iterates through all children for a given node, and prints out their file name
