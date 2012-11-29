@@ -37,11 +37,11 @@ static int xml_getattr(const char *path, struct stat *stbuf)
         stbuf->st_mode = S_IFDIR | 0755;
         stbuf->st_nlink = 2;
     }
-    // else {//if(strcmp(path, xml_path) == 0) { //at our directory
-    //     stbuf->st_mode = S_IFREG | 0444;
-    //     stbuf->st_nlink = 1;
-    //     stbuf->st_size = strlen(xml_get_content(path));
-    // }
+    else if(is_leaf(path) == -1) { //at our directory
+        stbuf->st_mode = S_IFREG | 0444;
+        stbuf->st_nlink = 1;
+        stbuf->st_size = strlen(xml_get_content(path));
+    }
     else
     {
         stbuf->st_mode = S_IFDIR | 0755;
