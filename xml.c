@@ -23,7 +23,16 @@ char* children[3];
 
 char* xml_get_content(const char *path){
     //get the content and return as a string (char*)
-    return path;
+    char* content;
+    node_t* root = open_file(sample_file_name);
+    node_t* node = get_node_at_path(root, path);
+    if (node != NULL)
+        content = roxml_get_content(node, NULL, 0, 0);
+    else
+        content = "No Content Here!";
+    roxml_close(root);
+
+    return content;
 }
 
 
@@ -33,7 +42,11 @@ static int xml_getattr(const char *path, struct stat *stbuf)
     int res = 0;
 
     memset(stbuf, 0, sizeof(struct stat));
-    if(strcmp(path, "/") == 0) { //root dir
+    node_t* root = open_file(sample_file_name);
+    node_t* node = get_node_at_path(root, path);
+    if (node == NULL)
+        res = -ENOENT;
+    else if(strcmp(path, "/") == 0) { //root dir
         stbuf->st_mode = S_IFDIR | 0755;
         stbuf->st_nlink = 2;
     }

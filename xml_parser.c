@@ -133,7 +133,7 @@ void save_xml_file(node_t* root)
     int len = 0;
     char * buffer = NULL;
     FILE * file_out;
-    len = roxml_commit_changes(root, NULL, &buffer, 1);
+    len = roxml_commit_changes(root, NULL, &buffer, 0);
     file_out = fopen(sample_file_name, "w");
     fwrite(buffer, 1, len, file_out);
     fclose(file_out);
