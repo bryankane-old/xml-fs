@@ -89,7 +89,9 @@ char* add_or_update_attribute(node_t* node, char* key, char* value)
 // (useful for initially creating a file before writing content, or "touch"ing a file)
 node_t* add_child_element(node_t* parent, char* tag_name)
 {
-    return roxml_add_node(parent, 0, ROXML_ELM_NODE, tag_name, NULL);
+    node_t* node = roxml_add_node(parent, 0, ROXML_ELM_NODE, tag_name, NULL);
+    add_or_update_attribute(node, "file_name", strcat(tag_name, "_0"));
+    return node;
 }
 
 // Finds the child of a parent element with a specific file name
@@ -129,6 +131,35 @@ node_t* get_node_at_path(node_t* root, char* path)
         next_child_file_name = strtok(NULL, delim);
     }
     return node;
+}
+
+// Given a string path of file names (delimited by a backslash),
+// returns the node at that path, or NULL if there's a problem finding it
+node_t* insert_node_at_path(node_t* root, char* path)
+{
+    char current_path[strlen(path)];
+    strcpy(current_path, path);
+    const char* delim = "/";
+    char* next_child_file_name = strtok(current_path, delim);
+    // next_child_file_name = strtok(NULL, delim);
+    node_t* node = root;
+    while (next_child_file_name != NULL)
+    {
+        node_t* next_child = get_child_by_file_name(node, next_child_file_name);
+        if (next_child == NULL) {
+            printf("Inserting node: %s\n", next_child_file_name);
+            add_child_element(node, next_child_file_name);
+            return NULL;
+        }
+        node = next_child;
+        next_child_file_name = strtok(NULL, delim);
+    }
+    return node;
+}
+
+void delete_node(node_t* node)
+{
+    roxml_del_node(node);
 }
 
 void get_all_child_file_names(char** buffer, node_t* parent)

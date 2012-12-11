@@ -21,12 +21,14 @@
 // static const char *xml_path = "/xml";
 char* children[3];
 
+node_t* root;
+
+
 
 char* xml_get_content(char *path){
     //get the content and return as a string (char*)
     char* content;
     int is_attribute = 0;
-    node_t* root = open_file(sample_file_name);
 
     //handle attributes
     char* att = strchr(path, '.');
@@ -52,7 +54,6 @@ char* xml_get_content(char *path){
             }
             else
                 content = "No Content Here!";
-            roxml_close(root);
         }
     }
 
@@ -63,7 +64,6 @@ char* xml_get_content(char *path){
             content = roxml_get_content(node, NULL, 0, 0);
         else
             content = "No content here!";
-        roxml_close(root);
     }
 
     return content;
@@ -75,7 +75,6 @@ static int xml_getattr(char *path, struct stat *stbuf)
 {
     int res = 0;
     memset(stbuf, 0, sizeof(struct stat));
-    node_t* root = open_file(sample_file_name);
 
     //handle attributes
     char* att = strchr(path, '.');
@@ -92,8 +91,10 @@ static int xml_getattr(char *path, struct stat *stbuf)
     }
 
     node_t* node = get_node_at_path(root, path);
-    if (node == NULL)
+    if (node == NULL) {
+        printf("Error with: %s\n", path);
         res = -ENOENT;
+    }
     else if(strcmp(path, "/") == 0) { //root dir
         stbuf->st_mode = S_IFDIR | 0755;
         stbuf->st_nlink = 2;
@@ -128,7 +129,6 @@ static int xml_readdir(char *path, void *buf, fuse_fill_dir_t filler, off_t offs
 
     //get children
     int i;
-    node_t* root = open_file(sample_file_name);
     node_t* current_dir = get_node_at_path(root, path);
     int num_children = roxml_get_chld_nb(current_dir);
     char* children[num_children];
@@ -150,7 +150,6 @@ static int xml_readdir(char *path, void *buf, fuse_fill_dir_t filler, off_t offs
     }
     if (is_leaf(path) == -1)
         filler(buf, ".content", NULL, 0);
-    roxml_close(root);
     return 0;
 }
 
@@ -184,16 +183,36 @@ static int xml_read(char *path, char *buf, size_t size, off_t offset, struct fus
     return size;
 }
 
+static int xml_mkdir(char *path, mode_t mode)
+{
+    node_t* node = insert_node_at_path(root, path);
+    save_xml_file(root);
+
+    return 0;
+}
+
+static int xml_rmdir(char *path, mode_t mode)
+{
+    node_t* node = get_node_at_path(root, path);
+    delete_node(node);
+    save_xml_file(root);
+
+    return 0;
+}
+
 static struct fuse_operations xml_oper = {
     .getattr	= xml_getattr,
     .readdir	= xml_readdir,
-    .open	= xml_open,
-    .read	= xml_read,
+    .open	    = xml_open,
+    .read	    = xml_read,
+    .mkdir      = xml_mkdir,
+    .rmdir      = xml_rmdir
 };
 
 int main(int argc, char *argv[])
 {
     save_initial_file_names(NULL);
+    root = open_file(sample_file_name);
     return fuse_main(argc, argv, &xml_oper);
 }
 
