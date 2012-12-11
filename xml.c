@@ -15,6 +15,7 @@
 #include <errno.h>
 #include <fcntl.h>
 #include "xml_parser.h"
+#include "xml.h"
 
 static const char *xml_str = "xml World!\n";
 static const char *xml_path = "/xml";
