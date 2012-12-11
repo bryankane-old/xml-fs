@@ -58,6 +58,15 @@ char** get_all_attributes(node_t* node)
     return attributes;
 }
 
+//get attribute content:
+char* get_attr_content(node_t* node, char* name)
+{
+    char* content;
+    node_t* current_attr = roxml_get_attr(node, name, 0);
+    content = roxml_get_content(current_attr, NULL, 0, 0);
+    return content;
+}
+
 // adds in an attribute for a given node, key (attribute name), and value
 // overwrites attribute value if exists (returns old value)
 char* add_or_update_attribute(node_t* node, char* key, char* value)
