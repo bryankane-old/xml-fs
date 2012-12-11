@@ -1,0 +1,58 @@
+<study_rooms>
+	<building>
+		<name>Marvin Center</name>
+		<room>Huddle Room 3
+			<description>
+			Hard to come by and only open until Midnight, unless it's finals!
+			</description>
+		</room>
+		<room>Dining Hall
+			<description>
+			Good for a side of distraction and free pretzels at 11!
+			</description>
+		</room>
+		<food>Auntie Annes</food>
+		<food>food trucks</food>
+		<food>CVS</food>
+	</building>
+	<building>
+		<name>Tompkins Hall</name>
+		<room>205
+			<description>
+				Need password to get into CS only room. Good for bp.
+			</description>
+		</room>
+		<room> 201
+			<description>
+				Painted with whiteboard paint. Bring your own expo markers!
+			</description>
+		</room>
+		<food>Ivory Tower</food>
+		<food>Pizza Delivery</food>
+	</building>
+	<building>
+		<name>Amsterdam Hall</name>
+		<room>913</room>
+			<description>
+			Keep calm and code on. 
+			</description>
+		<food>Brita water</food>
+		<food>Vending Machine</food>
+		<food>Girl Scout cookies</food>
+	</building>
+	<building>
+	<name>Duques</name>
+	<room>4th floor fort</room>
+		<description>
+		With tables from the nearby conference room, you can easily block yourself off from Business school kids pretending to have work. Huge windows!
+		</description>
+	<food>G Dub Java</food>
+	<food>Deli</food>
+	<food>Ivory</food>
+	</building>
+	<building>
+	<name>Gelman</name>
+	<description>
+		No rooms here.
+	</description>
+</study_rooms>
