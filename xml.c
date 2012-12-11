@@ -90,6 +90,17 @@ static int xml_readdir(char *path, void *buf, fuse_fill_dir_t filler, off_t offs
         filler(buf, children[i], NULL, 0);
         free(children[i]);
     }
+
+    //get attributes
+    int num_attributes = roxml_get_attr_nb(current_dir);
+    char** attributes = get_all_attributes(current_dir);
+    for(i=0; i < num_attributes; i++){
+        char attribute[255];
+        strcpy(attribute, ".");
+        strcat(attribute, attributes[i]);
+        filler(buf, attribute, NULL, 0);
+        free(attributes[i]);
+    }
     roxml_close(root);
     return 0;
 }

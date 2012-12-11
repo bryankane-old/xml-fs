@@ -53,7 +53,7 @@ char** get_all_attributes(node_t* node)
     {
         node_t* current_attr = roxml_get_attr(node, NULL, i);
         attributes[i] = malloc(sizeof(char) * 255);
-        roxml_get_content(current_attr, attributes[i], 255, NULL);
+        roxml_get_name(current_attr, attributes[i], 255);
     }
     return attributes;
 }

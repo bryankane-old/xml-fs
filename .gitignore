@@ -4,6 +4,8 @@
 # Libraries
 *.lib
 *.a
+libroxml/*
+
 
 # Shared objects (inc. Windows DLLs)
 *.dll
@@ -16,3 +18,4 @@
 *.out
 *.app
 *.class
+xml
