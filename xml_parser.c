@@ -63,7 +63,10 @@ char* get_attr_content(node_t* node, char* name)
 {
     char* content;
     node_t* current_attr = roxml_get_attr(node, name, 0);
-    content = roxml_get_content(current_attr, NULL, 0, 0);
+    if (current_attr != NULL)
+        content = roxml_get_content(current_attr, NULL, 0, 0);
+    else 
+        content = "Not an attribute!";
     return content;
 }
 

@@ -42,8 +42,14 @@ char* xml_get_content(char *path){
             clean_path[att-path-1] = '\0';
             // printf("%s\n", clean_path);
             node_t* node = get_node_at_path(root, clean_path);
-            if (node != NULL)
-                content = get_attr_content(node, strtok(att, delim));
+            if (node != NULL){
+                char *attribute = strtok(att, delim);
+                if (strcmp(attribute, "content") == 0){
+                    printf("access content\n");
+                    content = roxml_get_content(node, NULL, 0, 0);
+                } else 
+                    content = get_attr_content(node, attribute);
+            }
             else
                 content = "No Content Here!";
             roxml_close(root);
@@ -56,7 +62,7 @@ char* xml_get_content(char *path){
         if (node != NULL)
             content = roxml_get_content(node, NULL, 0, 0);
         else
-            content = "No Content Here!";
+            content = "No content here!";
         roxml_close(root);
     }
 
@@ -92,11 +98,11 @@ static int xml_getattr(char *path, struct stat *stbuf)
         stbuf->st_mode = S_IFDIR | 0755;
         stbuf->st_nlink = 2;
     }
-    else if(is_leaf(path) == -1) { //at our directory
-        stbuf->st_mode = S_IFREG | 0444;
-        stbuf->st_nlink = 1;
-        stbuf->st_size = strlen(xml_get_content(path));
-    }
+    // else if(is_leaf(path) == -1) { //at our directory
+    //     stbuf->st_mode = S_IFREG | 0444;
+    //     stbuf->st_nlink = 1;
+    //     stbuf->st_size = strlen(xml_get_content(path));
+    // }
     else
     {
         stbuf->st_mode = S_IFDIR | 0755;
@@ -142,6 +148,8 @@ static int xml_readdir(char *path, void *buf, fuse_fill_dir_t filler, off_t offs
         filler(buf, attribute, NULL, 0);
         free(attributes[i]);
     }
+    if (is_leaf(path) == -1)
+        filler(buf, ".content", NULL, 0);
     roxml_close(root);
     return 0;
 }
