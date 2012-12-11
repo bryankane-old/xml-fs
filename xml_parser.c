@@ -36,6 +36,28 @@ int is_leaf (char* path)
     return 0;
 }
 
+// to list attributes:
+//
+// char** attr = get_all_attributes(current_dir);
+// int num_attributes = roxml_get_attr_nb(current_dir);
+// for (i = 0; i < num_attributes; i++)
+//     printf("%s\n", attr[0]);
+
+// returns an array of attribute names for a given node
+char** get_all_attributes(node_t* node)
+{
+    int num_attributes = roxml_get_attr_nb(node);
+    int i;
+    char** attributes = malloc(sizeof(char*)*(num_attributes));
+    for (i = 0; i < num_attributes; i++)
+    {
+        node_t* current_attr = roxml_get_attr(node, NULL, i);
+        attributes[i] = malloc(sizeof(char) * 255);
+        roxml_get_content(current_attr, attributes[i], 255, NULL);
+    }
+    return attributes;
+}
+
 // adds in an attribute for a given node, key (attribute name), and value
 // overwrites attribute value if exists (returns old value)
 char* add_or_update_attribute(node_t* node, char* key, char* value)
