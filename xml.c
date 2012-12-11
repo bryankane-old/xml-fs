@@ -32,15 +32,15 @@ char* xml_get_content(char *path){
     char* att = strchr(path, '.');
     if (att){
         //we found a period in the path
-        printf(". found at %d\n", att-path);
+        // printf(". found at %d\n", att-path);
         if (path[att - path - 1] == '/'){
             is_attribute = 1;
-            printf("Get content from an attribute\n");
+            // printf("Get content from an attribute\n");
             char clean_path[att-path];
             const char* delim = ".";
             strncpy(clean_path, path, att - path - 1);
             clean_path[att-path-1] = '\0';
-            printf("%s\n", clean_path);
+            // printf("%s\n", clean_path);
             node_t* node = get_node_at_path(root, clean_path);
             if (node != NULL)
                 content = get_attr_content(node, strtok(att, delim));
@@ -51,6 +51,7 @@ char* xml_get_content(char *path){
     }
 
     if (is_attribute != 1){
+        // printf("Made it into non-attribute read\n");
         node_t* node = get_node_at_path(root, path);
         if (node != NULL)
             content = roxml_get_content(node, NULL, 0, 0);
@@ -74,9 +75,9 @@ static int xml_getattr(char *path, struct stat *stbuf)
     char* att = strchr(path, '.');
     if (att){
         //we found a period in the path
-        printf(". found at %d\n", att-path);
+        // printf(". found at %d\n", att-path);
         if (path[att - path - 1] == '/'){
-            printf("We have an attribute\n");
+            // printf("We have an attribute\n");
             stbuf->st_mode = S_IFREG | 0444;
             stbuf->st_nlink = 1;
             stbuf->st_size = strlen(xml_get_content(path));
