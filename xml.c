@@ -17,12 +17,12 @@
 #include "xml_parser.h"
 #include "xml.h"
 
-static const char *xml_str = "xml World!\n";
-static const char *xml_path = "/xml";
+// static const char *xml_str = "xml World!\n";
+// static const char *xml_path = "/xml";
 char* children[3];
 
 
-char* xml_get_content(const char *path){
+char* xml_get_content(char *path){
     //get the content and return as a string (char*)
     char* content;
     node_t* root = open_file(sample_file_name);
@@ -38,7 +38,7 @@ char* xml_get_content(const char *path){
 
 
 
-static int xml_getattr(const char *path, struct stat *stbuf)
+static int xml_getattr(char *path, struct stat *stbuf)
 {
     int res = 0;
 
@@ -67,7 +67,7 @@ static int xml_getattr(const char *path, struct stat *stbuf)
     return res;
 }
 
-static int xml_readdir(const char *path, void *buf, fuse_fill_dir_t filler, off_t offset, struct fuse_file_info *fi)
+static int xml_readdir(char *path, void *buf, fuse_fill_dir_t filler, off_t offset, struct fuse_file_info *fi)
 {
     (void) offset;
     (void) fi;
@@ -94,7 +94,7 @@ static int xml_readdir(const char *path, void *buf, fuse_fill_dir_t filler, off_
     return 0;
 }
 
-static int xml_open(const char *path, struct fuse_file_info *fi)
+static int xml_open(char *path, struct fuse_file_info *fi)
 {
     // if(strcmp(path, xml_path) != 0)
     //     return -ENOENT;
@@ -105,7 +105,7 @@ static int xml_open(const char *path, struct fuse_file_info *fi)
     return 0;
 }
 
-static int xml_read(const char *path, char *buf, size_t size, off_t offset, struct fuse_file_info *fi)
+static int xml_read(char *path, char *buf, size_t size, off_t offset, struct fuse_file_info *fi)
 {
     size_t len;
     (void) fi;
