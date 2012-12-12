@@ -96,17 +96,13 @@ static int xml_getattr(char *path, struct stat *stbuf)
         res = -ENOENT;
     }
     else if(strcmp(path, "/") == 0) { //root dir
-        char* perm = get_attr_content(node, "permissions");
-        stbuf->st_mode = strtol(perm, NULL, 8);
+        stbuf->st_mode = S_IFDIR | 0755;
         stbuf->st_nlink = 2;
     }
-    // else if(is_leaf(path) == -1) { //at our directory
-    //     stbuf->st_mode = S_IFREG | 0444;
-    //     stbuf->st_nlink = 1;
-    //     stbuf->st_size = strlen(xml_get_content(path));
-    // }
+    
     else
     {
+        char* perm = get_attr_content(node, "permissions");
         char* perm = get_attr_content(node, "permissions");
         stbuf->st_mode = strtol(perm, NULL, 8);
         stbuf->st_nlink = 2;
@@ -211,6 +207,20 @@ static int xml_chmod(char *path, mode_t mode)
     // save_xml_file(root);
     return 0;
 }
+
+static int xml_chown(char *path, uid_t u, gid_t g)
+{
+    node_t* node = get_node_at_path(root, path);
+    char uidstr[6];
+    sprintf (uidstr, "%d", u);
+    char gidstr[6];
+    sprintf (gidstr, "%d", g);
+    add_or_update_attribute(node, "uid", uidstr);
+    add_or_update_attribute(node, "gid", gidstr);
+    return 0;
+}
+
+int(*   chown )(const char *, uid_t, gid_t)
 
 static struct fuse_operations xml_oper = {
     .getattr	= xml_getattr,
