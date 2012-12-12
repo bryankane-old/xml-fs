@@ -97,7 +97,7 @@ static int xml_getattr(char *path, struct stat *stbuf)
     }
     else if(strcmp(path, "/") == 0) { //root dir
         char* perm = get_attr_content(node, "permissions");
-        stbuf->st_mode = strtol(perm, NULL, 8);
+        stbuf->st_mode = S_IFDIR | 0755;
         stbuf->st_nlink = 2;
     }
     // else if(is_leaf(path) == -1) { //at our directory
@@ -150,7 +150,7 @@ static int xml_readdir(char *path, void *buf, fuse_fill_dir_t filler, off_t offs
         filler(buf, attribute, NULL, 0);
         free(attributes[i]);
     }
-    if (is_leaf(path) == -1)
+    if (is_leaf(root, path) == -1)
         filler(buf, ".content", NULL, 0);
     return 0;
 }
@@ -234,9 +234,9 @@ static struct fuse_operations xml_oper = {
 
 int main(int argc, char *argv[])
 {
-    save_initial_file_names(NULL);
-    // printf("%d\n", argc);
-    root = open_file(argv[argc]);
+    save_initial_file_names(argv[argc-1]);
+    // printf("%s\n", argv[argc]);
+    root = open_file(argv[argc-1]);
     return fuse_main(argc-1, argv, &xml_oper);
 }
 
