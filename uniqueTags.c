@@ -33,7 +33,7 @@ void createUniqueTagsRecursive(node_t *node){
 }
 
 //Used for newly written nodes
-char* newNodeUniqueTag(node_t *ParentNode, char* newTag){
+char* newNodeUniqueTag(node_t *node, char* newTag){
  //Create linked list to temporarily store 
     int count=0; //The number to be concatenated to the original tag (allocated later)
     int numChildren = roxml_get_chld_nb(node);
