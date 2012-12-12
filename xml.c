@@ -105,10 +105,14 @@ static int xml_getattr(char *path, struct stat *stbuf)
     {
         char* perm = get_attr_content(node, "permissions");
         char* time = get_attr_content(node, "modified");
+        char* uid = get_attr_content(node, "uid");
+        char* gid = get_attr_content(node, "gid");
         // printf("perm: %s\n", perm);
         // printf("other: %o\n", S_IFDIR | 0755);
         stbuf->st_mode = strtol(perm, NULL, 8);
         stbuf->st_mtime = atoi(time);
+        stbuf->st_uid = atoi(uid);
+        stbuf->st_gid = atoi(gid);
         stbuf->st_nlink = 2;
     }
     // else
