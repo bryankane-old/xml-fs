@@ -30,10 +30,8 @@ int is_leaf (node_t* root, char* path)
     node_t* node = get_node_at_path(root, path);
     if (roxml_get_chld_nb(node) == 0)
     {
-        roxml_close(root);
         return -1;
     }
-    roxml_close(root);
     return 0;
 }
 
