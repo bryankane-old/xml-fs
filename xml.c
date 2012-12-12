@@ -83,7 +83,7 @@ static int xml_getattr(char *path, struct stat *stbuf)
         // printf(". found at %d\n", att-path);
         if (path[att - path - 1] == '/'){
             // printf("We have an attribute\n");
-            stbuf->st_mode = S_IFREG | 0444;
+            stbuf->st_mode = S_IFREG | 0755;
             stbuf->st_nlink = 1;
             stbuf->st_size = strlen(xml_get_content(path));
             return res;
@@ -161,12 +161,6 @@ static int xml_readdir(char *path, void *buf, fuse_fill_dir_t filler, off_t offs
 
 static int xml_open(char *path, struct fuse_file_info *fi)
 {
-    // if(strcmp(path, xml_path) != 0)
-    //     return -ENOENT;
-
-    if((fi->flags & 3) != O_RDONLY)
-        return -EACCES;
-
     return 0;
 }
 
@@ -189,14 +183,40 @@ static int xml_read(char *path, char *buf, size_t size, off_t offset, struct fus
     return size;
 }
 
-static int xml_write(char *path, char* buf, size_t size, off_t offset, struct fuse_file_info *fi){
-    size_t len;
-    (void) fi;
 
-    size = strlen(buf);
-    printf("%s\n", buf);
-    return size;
+static int xml_write(char *path, char* buf, size_t size, off_t offset, struct fuse_file_info *fi){
+    printf("%s %s\n", path, buf);
+    char* att = strchr(path, '.');
+    if (att){
+        //we found a period in the path
+        // printf(". found at %d\n", att-path);
+        if (path[att - path - 1] == '/'){
+            // is_attribute = 1;
+            printf("Set content for an attribute\n");
+            char clean_path[att-path];
+            const char* delim = ".";
+            strncpy(clean_path, path, att - path - 1);
+            clean_path[att-path-1] = '\0';
+            // printf("%s\n", clean_path);
+            node_t* node = get_node_at_path(root, clean_path);
+            if (node != NULL){
+                char *attribute = strtok(att, delim);
+                if (strcmp(attribute, "content") == 0){
+                    printf("set content\n");
+                    set_content(node, buf);
+                    
+                } else 
+                    add_or_update_attribute(node, attribute, buf);
+            }
+            else
+                printf("can't set!\n");
+        }
+    }
+
+    
+    return 0;
 }
+
 
 static int xml_mkdir(char *path, mode_t mode)
 {
@@ -238,6 +258,10 @@ static int xml_chown(char *path, uid_t u, gid_t g)
     return 0;
 }
 
+static int xml_truncate(char* path, off_t offset){
+    return 0; //we never truncate
+}
+
 int xml_utime(const char *path, struct utimbuf *tb)
 {
     time_t tim = time(NULL);
@@ -255,6 +279,8 @@ void xml_destroy()
 }
 
 
+
+
 static struct fuse_operations xml_oper = {
     .getattr	= xml_getattr,
     .readdir	= xml_readdir,
@@ -266,6 +292,7 @@ static struct fuse_operations xml_oper = {
     .chmod      = xml_chmod,
     .chown      = xml_chown,
     .utime      = xml_utime,
+    .truncate   = xml_truncate,
     .destroy    = xml_destroy
 };
 
