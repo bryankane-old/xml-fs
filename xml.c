@@ -229,8 +229,6 @@ static int xml_chown(char *path, uid_t u, gid_t g)
     return 0;
 }
 
-int(*   chown )(const char *, uid_t, gid_t)
-
 static struct fuse_operations xml_oper = {
     .getattr	= xml_getattr,
     .readdir	= xml_readdir,
