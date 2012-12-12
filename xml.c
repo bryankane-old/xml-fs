@@ -83,7 +83,7 @@ static int xml_getattr(char *path, struct stat *stbuf)
         // printf(". found at %d\n", att-path);
         if (path[att - path - 1] == '/'){
             // printf("We have an attribute\n");
-            stbuf->st_mode = S_IFREG | 0444;
+            stbuf->st_mode = S_IFREG | 0755;
             stbuf->st_nlink = 1;
             stbuf->st_size = strlen(xml_get_content(path));
             return res;
@@ -160,6 +160,14 @@ static int xml_open(char *path, struct fuse_file_info *fi)
     if((fi->flags & 3) != O_RDONLY)
         return -EACCES;
 
+    // int fd;
+    // fd = open(path, fi->flags);
+    // if (fd < 0){
+    //     printf("There's a problem in open!\n");
+    //     return -ENOENT;
+    // }
+    // fi->fh = fd;
+
     return 0;
 }
 
@@ -183,12 +191,9 @@ static int xml_read(char *path, char *buf, size_t size, off_t offset, struct fus
 }
 
 static int xml_write(char *path, char* buf, size_t size, off_t offset, struct fuse_file_info *fi){
-    size_t len;
-    (void) fi;
-
-    size = strlen(buf);
-    printf("%s\n", buf);
-    return size;
+    printf("%s %s\n", path, buf);
+    int ret = pwrite(fi->fh, buf, size, offset);
+    return ret;
 }
 
 static int xml_mkdir(char *path, mode_t mode)
