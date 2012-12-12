@@ -24,6 +24,7 @@ void createUniqueTagsRecursive(node_t *node){
         char newTagName[1000];
         snprintf(newTagName, sizeof(tagName) + 100, "%s_%d", tagName, num);
         set_file_name(child, newTagName);
+        add_attribute_if_doesnt_exist(child, "permissions", "00755");
         createUniqueTagsRecursive(child);
     }
     ll_destroy(ll);
