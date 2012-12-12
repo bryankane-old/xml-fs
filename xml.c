@@ -198,7 +198,7 @@ static int xml_write(char *path, char* buf, size_t size, off_t offset, struct fu
             if (node != NULL){
                 char *attribute = strtok(att, delim);
                 if (strcmp(attribute, "content") == 0){
-                    printf("set content\n");
+                    printf("set content: %s\n", buf);
                     set_content(node, buf);
                     
                 } else 
