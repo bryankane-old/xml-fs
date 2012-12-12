@@ -1,0 +1,49 @@
+<school name="The George Washington University">
+    <location city="Washington" state="DC" />
+    <student_population>
+        <freshmen>2500</freshmen>
+        <sophomores>2375</sophomores>
+        <juniors>2700</juniors>
+        <seniors>2634</seniors>
+    </student_population>
+    <dorms>
+        <dorm name="Thurston Hall">
+            <year>Freshman</year>
+            <rooms>500</rooms>
+            <year_built>1960</year_built>
+        </dorm>
+        <dorm name="Ivory Hall">
+            <year>Junior</year>
+            <rooms>400</rooms>
+            <year_built>2006</year_built>
+        </dorm>
+        <dorm name="Amsterdam Hall">
+            <year>Junior</year>
+            <rooms>250</rooms>
+            <year_built>2004</year_built>
+        </dorm>
+        <dorm name="JBKO Hall">
+            <year>Sophomore</year>
+            <rooms>100</rooms>
+            <year_built>1950</year_built>
+        </dorm>
+    </dorms>
+    <academic_buildings>
+        <building name="Phillips">
+            <classrooms>75</classrooms>
+            <offices>220</offices>
+            <labs>0</labs>
+        </building>
+        <building name="Hall of Government">
+            <classrooms>25</classrooms>
+            <offices>10</offices>
+            <labs>0</labs>
+        </building>
+        <building name="Tompkins Hall">
+            <classrooms>10</classrooms>
+            <offices>3</offices>
+            <labs>5</labs>
+        </building>
+    </academic_buildings>
+</school>    
+                

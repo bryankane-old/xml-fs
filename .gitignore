@@ -1,0 +1,48 @@
+# Object files
+*.o
+
+# Libraries
+*.lib
+*.a
+libroxml/*
+
+
+# Shared objects (inc. Windows DLLs)
+*.dll
+*.so
+*.so.*
+*.dylib
+
+# Executables
+*.exe
+*.out
+*.app
+*.class
+xml
+xml
+
+libroxml/docs/roxml.1
+
+libroxml/roxml
+
+sample.xml
+
+*.1
+
+libroxml/roxml
+
+xml
+
+libroxml/docs/roxml.1
+
+libroxml/docs/roxml.1
+
+xml
+
+libroxml/roxml
+
+libroxml/docs/roxml.1
+
+libroxml/roxml
+
+xml
