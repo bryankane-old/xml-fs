@@ -96,7 +96,8 @@ static int xml_getattr(char *path, struct stat *stbuf)
         res = -ENOENT;
     }
     else if(strcmp(path, "/") == 0) { //root dir
-        stbuf->st_mode = S_IFDIR | 0755;
+        char* perm = get_attr_content(node, "permissions");
+        stbuf->st_mode = strtol(perm, NULL, 8);
         stbuf->st_nlink = 2;
     }
     // else if(is_leaf(path) == -1) { //at our directory
@@ -106,7 +107,8 @@ static int xml_getattr(char *path, struct stat *stbuf)
     // }
     else
     {
-        stbuf->st_mode = S_IFDIR | 0755;
+        char* perm = get_attr_content(node, "permissions");
+        stbuf->st_mode = strtol(perm, NULL, 8);
         stbuf->st_nlink = 2;
     }
     // else
@@ -200,13 +202,24 @@ static int xml_rmdir(char *path, mode_t mode)
     return 0;
 }
 
+static int xml_chmod(char *path, mode_t mode)
+{
+    node_t* node = get_node_at_path(root, path);
+    char modestr[6];
+    sprintf (modestr, "%o", mode);
+    add_or_update_attribute(node, "permissions", modestr);
+    // save_xml_file(root);
+    return 0;
+}
+
 static struct fuse_operations xml_oper = {
     .getattr	= xml_getattr,
     .readdir	= xml_readdir,
     .open	    = xml_open,
     .read	    = xml_read,
     .mkdir      = xml_mkdir,
-    .rmdir      = xml_rmdir
+    .rmdir      = xml_rmdir,
+    .chmod      = xml_chmod
 };
 
 int main(int argc, char *argv[])

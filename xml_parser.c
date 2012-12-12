@@ -85,6 +85,19 @@ char* add_or_update_attribute(node_t* node, char* key, char* value)
     return prev_value;
 }
 
+// adds in an attribute for a given node, key (attribute name), and value
+// overwrites attribute value if exists (returns old value)
+char* add_attribute_if_doesnt_exist(node_t* node, char* key, char* value)
+{
+    node_t* prev_attr = roxml_get_attr(node, key, 0);
+    char* prev_value = NULL;
+    if (prev_attr == NULL)
+    {
+        roxml_add_node(node, 0, ROXML_ATTR_NODE, key, value);
+    }
+    return prev_value;
+}
+
 // Adds an empty child element with a given file name and parent
 // (useful for initially creating a file before writing content, or "touch"ing a file)
 node_t* add_child_element(node_t* parent, char* tag_name)
