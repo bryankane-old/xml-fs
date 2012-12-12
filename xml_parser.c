@@ -4,6 +4,8 @@
 #include "xml_parser.h"
 #include "uniqueTags.h"
 
+char* path;
+
 // returns the "file_name" attribute for a given node
 char* get_file_name(node_t* node)
 {
@@ -23,9 +25,8 @@ char* set_file_name(node_t* node, char* file_name)
 
 // returns -1 if the node is a leaf (has no children)
 // or 0 if it is not a leaf (has at least one child)
-int is_leaf (char* path)
+int is_leaf (node_t* root, char* path)
 {
-    node_t* root = open_file(sample_file_name);
     node_t* node = get_node_at_path(root, path);
     if (roxml_get_chld_nb(node) == 0)
     {
@@ -212,7 +213,7 @@ void save_xml_file(node_t* root)
     char * buffer = NULL;
     FILE * file_out;
     len = roxml_commit_changes(root, NULL, &buffer, 0);
-    file_out = fopen(sample_file_name, "w");
+    file_out = fopen(path, "w");
     fwrite(buffer, 1, len, file_out);
     fclose(file_out);
 }
@@ -222,7 +223,8 @@ void save_xml_file(node_t* root)
 // if no file path specified, open the sample file
 node_t* open_file(char* file_path)
 {
-    if (file_path == NULL)
+    path = file_path;
+    if (path == NULL)
         return roxml_load_doc(sample_file_name);
     else
         return roxml_load_doc(file_path);

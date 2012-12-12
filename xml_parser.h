@@ -7,7 +7,7 @@
 
 char* get_file_name(node_t* node);
 char* set_file_name(node_t* node, char* file_name);
-int is_leaf (char* path);
+int is_leaf (node_t* root, char* path);
 char* add_or_update_attribute(node_t* node, char* key, char* value);
 char* add_attribute_if_doesnt_exist(node_t* node, char* key, char* value);
 node_t* add_child_element(node_t* parent, char* tag_name);
