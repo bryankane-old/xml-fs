@@ -34,20 +34,16 @@ char* xml_get_content(char *path){
     char* att = strchr(path, '.');
     if (att){
         //we found a period in the path
-        // printf(". found at %d\n", att-path);
         if (path[att - path - 1] == '/'){
             is_attribute = 1;
-            // printf("Get content from an attribute\n");
             char clean_path[att-path];
             const char* delim = ".";
             strncpy(clean_path, path, att - path - 1);
             clean_path[att-path-1] = '\0';
-            // printf("%s\n", clean_path);
             node_t* node = get_node_at_path(root, clean_path);
             if (node != NULL){
                 char *attribute = strtok(att, delim);
                 if (strcmp(attribute, "content") == 0){
-                    printf("access content\n");
                     content = roxml_get_content(node, NULL, 0, 0);
                 } else 
                     content = get_attr_content(node, attribute);
@@ -58,7 +54,6 @@ char* xml_get_content(char *path){
     }
 
     if (is_attribute != 1){
-        // printf("Made it into non-attribute read\n");
         node_t* node = get_node_at_path(root, path);
         if (node != NULL)
             content = roxml_get_content(node, NULL, 0, 0);
@@ -80,9 +75,7 @@ static int xml_getattr(char *path, struct stat *stbuf)
     char* att = strchr(path, '.');
     if (att){
         //we found a period in the path
-        // printf(". found at %d\n", att-path);
         if (path[att - path - 1] == '/'){
-            // printf("We have an attribute\n");
             stbuf->st_mode = S_IFREG | 0755;
             stbuf->st_nlink = 1;
             stbuf->st_size = strlen(xml_get_content(path));
@@ -96,7 +89,6 @@ static int xml_getattr(char *path, struct stat *stbuf)
         res = -ENOENT;
     }
     else if(strcmp(path, "/") == 0) { //root dir
-        // char* perm = get_attr_content(node, "permissions");
         stbuf->st_mode = S_IFDIR | 0755;
         stbuf->st_nlink = 2;
     }
@@ -107,17 +99,12 @@ static int xml_getattr(char *path, struct stat *stbuf)
         char* time = get_attr_content(node, "modified");
         char* uid = get_attr_content(node, "uid");
         char* gid = get_attr_content(node, "gid");
-        // printf("perm: %s\n", perm);
-        // printf("other: %o\n", S_IFDIR | 0755);
         stbuf->st_mode = strtol(perm, NULL, 8);
         stbuf->st_mtime = atoi(time);
         stbuf->st_uid = atoi(uid);
         stbuf->st_gid = atoi(gid);
         stbuf->st_nlink = 2;
     }
-    // else
-    //     res = -ENOENT;
-
     return res;
 }
 
@@ -125,9 +112,6 @@ static int xml_readdir(char *path, void *buf, fuse_fill_dir_t filler, off_t offs
 {
     (void) offset;
     (void) fi;
-
-    // if(strcmp(path, "/") != 0)
-    //     return -ENOENT;
 
     //add standard paths
     filler(buf, ".", NULL, 0);
@@ -168,10 +152,7 @@ static int xml_read(char *path, char *buf, size_t size, off_t offset, struct fus
 {
     size_t len;
     (void) fi;
-    // if(strcmp(path, xml_path) != 0)
-    //     return -ENOENT;
     char* content = xml_get_content(path);
-
     len = strlen(content);
     if (offset < len) {
         if (offset + size > len)
@@ -189,20 +170,16 @@ static int xml_write(char *path, char* buf, size_t size, off_t offset, struct fu
     char* att = strchr(path, '.');
     if (att){
         //we found a period in the path
-        // printf(". found at %d\n", att-path);
         if (path[att - path - 1] == '/'){
             // is_attribute = 1;
-            printf("Set content for an attribute\n");
             char clean_path[att-path];
             const char* delim = ".";
             strncpy(clean_path, path, att - path - 1);
             clean_path[att-path-1] = '\0';
-            // printf("%s\n", clean_path);
             node_t* node = get_node_at_path(root, clean_path);
             if (node != NULL){
                 char *attribute = strtok(att, delim);
                 if (strcmp(attribute, "content") == 0){
-                    printf("set content: %s\n", buf);
                     set_content(node, buf);
                     
                 } else 
