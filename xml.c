@@ -225,7 +225,8 @@ static struct fuse_operations xml_oper = {
 int main(int argc, char *argv[])
 {
     save_initial_file_names(NULL);
-    root = open_file(sample_file_name);
-    return fuse_main(argc, argv, &xml_oper);
+    // printf("%d\n", argc);
+    root = open_file(argv[argc]);
+    return fuse_main(argc-1, argv, &xml_oper);
 }
 
