@@ -103,7 +103,6 @@ static int xml_getattr(char *path, struct stat *stbuf)
     else
     {
         char* perm = get_attr_content(node, "permissions");
-        char* perm = get_attr_content(node, "permissions");
         stbuf->st_mode = strtol(perm, NULL, 8);
         stbuf->st_nlink = 2;
     }
