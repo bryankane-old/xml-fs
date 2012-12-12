@@ -101,8 +101,12 @@ char* add_attribute_if_doesnt_exist(node_t* node, char* key, char* value)
 // (useful for initially creating a file before writing content, or "touch"ing a file)
 node_t* add_child_element(node_t* parent, char* tag_name)
 {
+    char* file_name = newNodeUniqueTag(parent, tag_name);
     node_t* node = roxml_add_node(parent, 0, ROXML_ELM_NODE, tag_name, NULL);
-    add_or_update_attribute(node, "file_name", strcat(tag_name, "_0"));
+    add_or_update_attribute(node, "file_name", file_name);
+    add_or_update_attribute(node, "permissions", "40755");
+    add_or_update_attribute(node, "uid", "0");
+    add_or_update_attribute(node, "gid", "0");
     return node;
 }
 
