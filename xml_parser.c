@@ -69,6 +69,16 @@ char* get_attr_content(node_t* node, char* name)
     return content;
 }
 
+void set_content(node_t* node, char* content) {
+    node_t* prev_txt = roxml_get_txt(node, 0);
+    if (prev_txt != NULL)
+    {
+        roxml_del_node(prev_txt);
+    }
+    roxml_add_node(node, 0, ROXML_TXT_NODE, NULL, content);
+    return;
+}
+
 // adds in an attribute for a given node, key (attribute name), and value
 // overwrites attribute value if exists (returns old value)
 char* add_or_update_attribute(node_t* node, char* key, char* value)
