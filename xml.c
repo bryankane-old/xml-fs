@@ -195,8 +195,8 @@ static int xml_read(char *path, char *buf, size_t size, off_t offset, struct fus
 
 static int xml_write(char *path, char* buf, size_t size, off_t offset, struct fuse_file_info *fi){
     printf("%s %s\n", path, buf);
-    int ret = pwrite(fi->fh, buf, size, offset);
-    return ret;
+    // int ret = pwrite(fi->fh, buf, size, offset);
+    return 0;
 }
 
 static int xml_mkdir(char *path, mode_t mode)
