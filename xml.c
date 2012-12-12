@@ -181,6 +181,15 @@ static int xml_read(char *path, char *buf, size_t size, off_t offset, struct fus
     return size;
 }
 
+static int xml_write(char *path, char* buf, size_t size, off_t offset, struct fuse_file_info *fi){
+    size_t len;
+    (void) fi;
+
+    size = strlen(buf);
+    printf("%s\n", buf);
+    return size;
+}
+
 static int xml_mkdir(char *path, mode_t mode)
 {
     node_t* node = insert_node_at_path(root, path);
@@ -229,6 +238,7 @@ static struct fuse_operations xml_oper = {
     .read	    = xml_read,
     .mkdir      = xml_mkdir,
     .rmdir      = xml_rmdir,
+    .write      = xml_write,
     .chmod      = xml_chmod
 };
 
