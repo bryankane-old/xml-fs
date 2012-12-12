@@ -104,9 +104,11 @@ static int xml_getattr(char *path, struct stat *stbuf)
     else
     {
         char* perm = get_attr_content(node, "permissions");
+        char* time = get_attr_content(node, "modified");
         // printf("perm: %s\n", perm);
         // printf("other: %o\n", S_IFDIR | 0755);
         stbuf->st_mode = strtol(perm, NULL, 8);
+        stbuf->st_mtime = atoi(time);
         stbuf->st_nlink = 2;
     }
     // else
@@ -228,8 +230,26 @@ static int xml_chown(char *path, uid_t u, gid_t g)
     sprintf (gidstr, "%d", g);
     add_or_update_attribute(node, "uid", uidstr);
     add_or_update_attribute(node, "gid", gidstr);
+    // save_xml_file(root);
     return 0;
 }
+
+int xml_utime(const char *path, struct utimbuf *tb)
+{
+    time_t tim = time(NULL);
+    char tim_str[12];
+    sprintf (tim_str, "%d", tim);
+    node_t* node = get_node_at_path(root, path);
+    add_or_update_attribute(node, "modified", tim_str);
+    // save_xml_file(root);
+    return 0;
+}
+
+void xml_destroy()
+{
+    save_xml_file(root);
+}
+
 
 static struct fuse_operations xml_oper = {
     .getattr	= xml_getattr,
@@ -240,7 +260,9 @@ static struct fuse_operations xml_oper = {
     .rmdir      = xml_rmdir,
     .write      = xml_write,
     .chmod      = xml_chmod,
-    .chown      = xml_chown
+    .chown      = xml_chown,
+    .utime      = xml_utime,
+    .destroy    = xml_destroy
 };
 
 int main(int argc, char *argv[])

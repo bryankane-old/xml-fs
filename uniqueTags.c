@@ -27,6 +27,10 @@ void createUniqueTagsRecursive(node_t *node){
         add_attribute_if_doesnt_exist(child, "permissions", "40755");
         add_attribute_if_doesnt_exist(child, "uid", "0");
         add_attribute_if_doesnt_exist(child, "gid", "0");
+        time_t tim = time(NULL);
+        char tim_str[12];
+        sprintf (tim_str, "%d", tim);
+        add_attribute_if_doesnt_exist(child, "modified", tim_str);
         createUniqueTagsRecursive(child);
     }
     ll_destroy(ll);
