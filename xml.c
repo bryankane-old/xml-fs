@@ -236,7 +236,8 @@ static struct fuse_operations xml_oper = {
     .mkdir      = xml_mkdir,
     .rmdir      = xml_rmdir,
     .write      = xml_write,
-    .chmod      = xml_chmod
+    .chmod      = xml_chmod,
+    .chown      = xml_chown
 };
 
 int main(int argc, char *argv[])
